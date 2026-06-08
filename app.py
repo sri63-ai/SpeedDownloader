@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, send_from_directory
 import yt_dlp
 import os
 
@@ -7,6 +7,11 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     return render_template('index.html')
+
+# New Route to display Terms and Conditions Page safely
+@app.route('/terms')
+def terms():
+    return render_template('terms.html')
 
 @app.route('/download', methods=['POST'])
 def download():
