@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Lightning Fast Video Downloader</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 450px;
+        }
+        h1 { margin-bottom: 10px; font-size: 28px; }
+        p { color: #ddd; margin-bottom: 30px; }
+        input[type="text"] {
+            width: 90%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        button {
+            background: #00c6ff;
+            background: -webkit-linear-gradient(to right, #0072ff, #00c6ff);
+            background: linear-gradient(to right, #0072ff, #00c6ff);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+        }
+        button:hover { transform: scale(1.02); box-shadow: 0 5px 15px rgba(0,198,255,0.4); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ SpeedDownloader</h1>
+        <p>The Fastest Video Downloader on the Internet</p>
+        <form action="/download" method="POST">
+            <input type="text" name="url" placeholder="Paste your YouTube video link here..." required>
+            <button type="submit">Download Video Instantly</button>
+        </form>
+    </div>
+</body>
+</html>
