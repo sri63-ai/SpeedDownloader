@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ Lightning Fast Video Downloader</title>
+    <title>⚡ SpeedDownloader - Fast & Smart</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
             color: #fff;
             display: flex;
             flex-direction: column;
@@ -19,77 +19,167 @@
             box-sizing: border-box;
         }
         .container {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.07);
             padding: 40px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
             width: 100%;
             max-width: 450px;
             margin-bottom: 30px;
         }
-        h1 { margin-bottom: 10px; font-size: 28px; }
-        p { color: #ddd; margin-bottom: 30px; }
+        h1 { 
+            margin-bottom: 5px; 
+            font-size: 32px; 
+            background: linear-gradient(to right, #ff9900, #ff5500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .tagline { 
+            color: #e2e8f0; 
+            margin-bottom: 25px; 
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        
+        /* 📖 How to Use Section */
+        .how-to-use {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 25px;
+            text-align: left;
+            font-size: 13px;
+            border-left: 4px solid #ff9900;
+        }
+        .how-to-use h3 { margin: 0 0 8px 0; color: #ff9900; font-size: 15px; }
+        .how-to-use ol { margin: 0; padding-left: 20px; color: #cbd5e1; }
+        .how-to-use li { margin-bottom: 5px; }
+
         input[type="text"] {
             width: 90%;
-            padding: 12px 15px;
-            border: none;
-            border-radius: 8px;
+            padding: 14px 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
             margin-bottom: 20px;
             font-size: 16px;
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            outline: none;
+            transition: 0.3s;
         }
+        input[type="text"]:focus {
+            border-color: #ff9900;
+            box-shadow: 0 0 10px rgba(255, 153, 0, 0.3);
+        }
+
+        /* 🤖 Captcha Box */
+        .captcha-container {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .captcha-container input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+        }
+        .captcha-text { font-size: 14px; color: #e2e8f0; flex-grow: 1; }
+        .captcha-icon { font-size: 20px; opacity: 0.7; }
+
         button {
-            background: #00c6ff;
-            background: linear-gradient(to right, #0072ff, #00c6ff);
+            background: linear-gradient(to right, #ff9900, #ff5500);
             color: white;
             border: none;
-            padding: 12px 30px;
+            padding: 14px 30px;
             font-size: 16px;
             font-weight: bold;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             transition: 0.3s;
             width: 100%;
         }
-        button:hover { transform: scale(1.02); box-shadow: 0 5px 15px rgba(0,198,255,0.4); }
-        .status-msg { margin-top: 15px; font-weight: bold; color: #00c6ff; }
+        button:hover { 
+            transform: scale(1.02); 
+            box-shadow: 0 5px 20px rgba(255,85,0,0.4); 
+        }
+        .status-msg { margin-top: 15px; font-weight: bold; color: #ff9900; font-size: 14px; }
+        
         .legal-footer {
             max-width: 600px;
             text-align: center;
             font-size: 12px;
-            color: #ccc;
+            color: #94a3b8;
             line-height: 1.6;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 15px;
-            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .legal-footer a { color: #00c6ff; text-decoration: none; font-weight: bold; }
-        .legal-footer a:hover { text-decoration: underline; }
-        .contact-box {
-            margin-top: 15px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 15px;
-            color: #fff;
+        
+        /* 🔗 Quick Links Section */
+        .quick-links {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
+        .quick-links a { 
+            color: #ff9900; 
+            text-decoration: none; 
+            font-weight: bold; 
+            margin: 0 10px; 
+        }
+        .quick-links a:hover { text-decoration: underline; }
+        
+        .contact-box { margin-top: 15px; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>⚡ SpeedDownloader</h1>
-        <p>The Fastest Video Downloader on the Internet</p>
-        <input type="text" id="videoUrl" placeholder="Paste your FB/Insta link here..." required>
-        <button onclick="startDownload()">Download Video Instantly</button>
+        <div class="tagline">Download Fast. Live Smart.</div>
+        
+        <div class="how-to-use">
+            <h3>📖 How to Use:</h3>
+            <ol>
+                <li>Copy the Facebook or Instagram video link.</li>
+                <li>Paste the link into the input box below.</li>
+                <li>Check the verification box and click Download!</li>
+            </ol>
+        </div>
+        
+        <input type="text" id="videoUrl" placeholder="Paste Facebook or Instagram link here..." required>
+        
+        <div class="captcha-container">
+            <input type="checkbox" id="robotCheck">
+            <label for="robotCheck" class="captcha-text">I'm not a robot</label>
+            <span class="captcha-icon">🛡️</span>
+        </div>
+
+        <button onclick="startDownload()">Download Instantly</button>
         <div class="status-msg" id="status"></div>
     </div>
 
     <div class="legal-footer">
-        <strong>Disclaimer & Terms of Service:</strong><br>
-        This website is strictly intended for personal use only. We do not host or store any videos on our servers. By using this tool, you agree to our <a href="/terms" target="_blank">Terms & Conditions</a>.
+        <div class="quick-links">
+            <a href="/terms" target="_blank">Terms of Service</a> | 
+            <a href="/privacy" target="_blank">Privacy Policy</a> | 
+            <a href="mailto:support@speeddownloader.in">Support</a>
+        </div>
+
+        <strong>Disclaimer:</strong> This website is strictly intended for personal use only. We do not host or store any videos on our servers.
         
         <div class="contact-box">
-            <strong>Contact & Feedback:</strong><br>
-            For business inquiries, advertisements, or feedback, please email us at: <a href="mailto:support@speeddownloader.in"><strong>support@speeddownloader.in</strong></a>
+            For business inquiries or feedback, email us at: <a href="mailto:support@speeddownloader.in" style="color: #ff9900; text-decoration: none; font-weight: bold;">support@speeddownloader.in</a>
         </div>
     </div>
 
@@ -97,12 +187,21 @@
         async function startDownload() {
             const urlInput = document.getElementById('videoUrl').value;
             const statusDiv = document.getElementById('status');
+            const robotCheck = document.getElementById('robotCheck').checked;
             
             if(!urlInput) {
-                statusDiv.innerText = "Please paste a valid link!";
+                statusDiv.innerText = "❌ Please paste a valid link!";
                 return;
             }
 
+            /* 🤖 Captcha Check */
+            if(!robotCheck) {
+                statusDiv.innerText = "⚠️ Please check the 'I'm not a robot' box to proceed!";
+                statusDiv.style.color = "#ff5500";
+                return;
+            }
+
+            statusDiv.style.color = "#ff9900";
             statusDiv.innerText = "⚡ Fetching high-speed download link... Please wait...";
 
             try {
@@ -118,7 +217,6 @@
 
                 if(data.success) {
                     statusDiv.innerText = "🎉 Downloading started...";
-                    
                     const a = document.createElement('a');
                     a.href = data.download_url;
                     a.download = data.title + ".mp4";
