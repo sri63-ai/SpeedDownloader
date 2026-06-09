@@ -25,6 +25,7 @@ def download():
         os.makedirs(output_folder)
 
     ydl_opts = {
+        'cookiefile': 'cookies.txt',
         'format': 'best[ext=mp4]/best',
         'outtmpl': f'{output_folder}/video_%(timestamp)s.%(ext)s',
         'noplaylist': True,
