@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import yt_dlp
+import os
 
 app = Flask(__name__)
 
@@ -21,6 +22,10 @@ def get_download_link():
         'format': 'best[ext=mp4]/best',
         'quiet': True,
         'no_warnings': True,
+        'cookiefile': 'cookies.txt',  # This will read your cookies.txt file from GitHub root
+        'http_headers': {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        }
     }
 
     try:
