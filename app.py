@@ -4,8 +4,6 @@ import os
 
 app = Flask(__name__)
 
-app.wsgi_app = app.wsgi_app 
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -39,3 +37,6 @@ def get_download_link():
         return jsonify({"success": True, "download_url": direct_url, "title": title})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
+
+if __name__ == "__main__":
+    app.run(debug=True, port=int(os.environ.get("PORT", 5000)))
