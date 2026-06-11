@@ -166,7 +166,7 @@
             </ol>
         </div>
         
-        <input type="text" id="videoUrl" placeholder="Paste Facebook or Instagram link here..." required>
+        <input type="text" id="videoUrl" placeholder="Paste youtube or Facebook or Instagram link here..." required>
         
         <div class="captcha-container">
             <input type="checkbox" id="robotCheck">
@@ -233,8 +233,8 @@
                     a.click();
                     document.body.removeChild(a);
                 } else {
-                    statusDiv.innerText = "❌ Note: YouTube is not supported. Please paste Facebook or Instagram links.";
-                }
+    statusDiv.innerText = "❌ Note: This link is not supported. Please paste Facebook, Instagram, or other social media links.";
+}
             } catch (error) {
                 statusDiv.innerText = "❌ Connection failed. Try again.";
             }
