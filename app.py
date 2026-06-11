@@ -4,6 +4,8 @@ import os
 
 app = Flask(__name__)
 
+app.wsgi_app = app.wsgi_app 
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -22,7 +24,7 @@ def get_download_link():
         'format': 'best[ext=mp4]/best',
         'quiet': True,
         'no_warnings': True,
-        'cookiefile': 'cookies.txt',  # This will read your cookies.txt file from GitHub root
+        'cookiefile': 'cookies.txt',
         'http_headers': {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         }
@@ -37,6 +39,3 @@ def get_download_link():
         return jsonify({"success": True, "download_url": direct_url, "title": title})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
-
-if __name__ == "__main__":
-    app.run(debug=True, port=5000)
