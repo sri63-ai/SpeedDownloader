@@ -18,8 +18,9 @@ def get_download_link():
     if not video_url:
         return jsonify({"error": "URL cannot be empty!"}), 400
 
+    # Combined single format selection to ensure audio + video are pre-merged
     ydl_opts = {
-        'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+        'format': 'best[ext=mp4]/best',
         'quiet': True,
         'no_warnings': True,
         'cookiefile': 'cookies.txt',
@@ -39,14 +40,29 @@ def get_download_link():
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(video_url, download=False)
             
-            direct_url = info.get('url')
-            if not direct_url and 'formats' in info:
+            direct_url = None
+            
+            # Scan formats to guarantee both video and audio codecs exist
+            if 'formats' in info:
                 for f in reversed(info['formats']):
-                    if f.get('vcodec') != 'none' and f.get('acodec') != 'none':
+                    if f.get('vcodec') != 'none' and f.get('acodec') != 'none' and f.get('ext') == 'mp4':
                         direct_url = f.get('url')
                         break
+                
+                # Fallback to any extension with combined audio and video tracks
                 if not direct_url:
-                    direct_url = info['formats'][-1].get('url')
+                    for f in reversed(info['formats']):
+                        if f.get('vcodec') != 'none' and f.get('acodec') != 'none':
+                            direct_url = f.get('url')
+                            break
+
+            # Secondary fallback to main info URL
+            if not direct_url:
+                direct_url = info.get('url')
+
+            # Final fallback to last available stream format
+            if not direct_url and 'formats' in info:
+                direct_url = info['formats'][-1].get('url')
 
             title = info.get('title', 'video')
             
