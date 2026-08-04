@@ -15,60 +15,76 @@ def terms():
 @app.route('/get_download_link', methods=['POST'])
 def get_download_link():
     video_url = request.form.get('url')
-    if not video_url:
-        return jsonify({"error": "URL cannot be empty!"}), 400
+    req_type = request.form.get('type', 'video')
 
-    # Combined single format selection to ensure audio + video are pre-merged
+    if not video_url:
+        return jsonify({"success": False, "error": "URL cannot be empty!"}), 400
+
+    print(f"[*] Processing request for URL: {video_url} [Mode: {req_type}]")
+
     ydl_opts = {
-        'format': 'best[ext=mp4]/best',
+        'format': 'best/bestvideo+bestaudio/best',
         'quiet': True,
         'no_warnings': True,
-        'cookiefile': 'cookies.txt',
         'nocheckcertificate': True,
         'geo_bypass': True,
-        'extract_flat': False,
-        'skip_download': True,
-        'http_headers': {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.9',
-            'Sec-Fetch-Mode': 'navigate'
+        # Helps bypass youtube bot detection even if cookies are missing
+        'extractor_args': {
+            'youtube': {
+                'player_client': ['android', 'web']
+            }
         }
     }
 
+    # Automatically checks for cookies.txt in the project directory
+    cookie_path = os.path.join(os.path.dirname(__file__), 'cookies.txt')
+    if os.path.exists(cookie_path):
+        ydl_opts['cookiefile'] = cookie_path
+
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            print("[*] Extracting media info via yt-dlp...")
             info = ydl.extract_info(video_url, download=False)
-            
+            title = info.get('title', 'Media')
+
+            # 1. PHOTO download logic
+            if req_type == 'photo':
+                photo_url = info.get('thumbnail')
+                if info.get('thumbnails') and isinstance(info['thumbnails'], list):
+                    photo_url = info['thumbnails'][-1].get('url')
+                
+                if photo_url:
+                    print("[*] Photo thumbnail link extracted successfully!")
+                    return jsonify({"success": True, "download_url": photo_url, "title": title})
+                return jsonify({"success": False, "error": "Photo link not found!"}), 400
+
+            # 2. VIDEO download logic
             direct_url = None
-            
-            # Scan formats to guarantee both video and audio codecs exist
-            if 'formats' in info:
+
+            if 'url' in info and info['url']:
+                direct_url = info['url']
+
+            if not direct_url and 'formats' in info:
                 for f in reversed(info['formats']):
-                    if f.get('vcodec') != 'none' and f.get('acodec') != 'none' and f.get('ext') == 'mp4':
+                    if f.get('vcodec') != 'none' and f.get('acodec') != 'none' and f.get('url'):
                         direct_url = f.get('url')
                         break
-                
-                # Fallback to any extension with combined audio and video tracks
-                if not direct_url:
-                    for f in reversed(info['formats']):
-                        if f.get('vcodec') != 'none' and f.get('acodec') != 'none':
-                            direct_url = f.get('url')
-                            break
 
-            # Secondary fallback to main info URL
-            if not direct_url:
-                direct_url = info.get('url')
-
-            # Final fallback to last available stream format
-            if not direct_url and 'formats' in info:
+            if not direct_url and 'formats' in info and len(info['formats']) > 0:
                 direct_url = info['formats'][-1].get('url')
 
-            title = info.get('title', 'video')
-            
-        return jsonify({"success": True, "download_url": direct_url, "title": title})
+            if direct_url:
+                print("[*] Video download link generated successfully!")
+                return jsonify({"success": True, "download_url": direct_url, "title": title})
+            else:
+                return jsonify({"success": False, "error": "Could not extract video stream. Platform might be blocking requests!"}), 400
+
     except Exception as e:
-        return jsonify({"success": False, "error": str(e)}), 500
+        error_msg = str(e)
+        print(f"[!] Error occurred: {error_msg}")
+        if "Sign in to confirm" in error_msg or "bot" in error_msg.lower():
+            error_msg = "Platform blocked this request. Please add 'cookies.txt' to bypass bot detection."
+        return jsonify({"success": False, "error": error_msg}), 500
 
 if __name__ == "__main__":
     app.run(debug=True, port=int(os.environ.get("PORT", 5000)))
