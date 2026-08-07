@@ -27,7 +27,7 @@ def founder():
 
 @app.route('/terms')
 def terms():
-    return "<h3>Terms of Service & Privacy Policy</h3><p>Speed Downloader respects user privacy. We do not store any downloaded media or user data.</p><a href='/'>Back to Home</a>"
+    return render_template('terms.html')
 
 @app.route('/get_download_link', methods=['POST'])
 def get_download_link():
